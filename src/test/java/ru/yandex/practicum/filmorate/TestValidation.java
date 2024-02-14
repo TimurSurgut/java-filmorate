@@ -21,30 +21,30 @@ class TestValidation {
     void postFilm() {
         FilmController filmController = new FilmController();
         //Проверка добавления фильма при соблюдении правил;
-        Film film = new Film(2, "Терминатор", "описание", "2000-01-22",90);
+        Film film = new Film(2, "Терминатор", "описание", "2000-01-22", 90);
         filmController.post(film);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с тем же id;
-        Film film2 = new Film(2, "Блэйд", "описание", "2000-01-22",90);
+        Film film2 = new Film(2, "Блэйд", "описание", "2000-01-22", 90);
         filmController.post(film2);
         assertEquals("Терминатор", filmController.findAll().get(2).getName(),
                 "Название должно быть Терминатор");
         //Проверка исключения при попытке добавить фильм без наименования;
-        Film film3 = new Film(3, "", "описание", "2000-01-22",90);
+        Film film3 = new Film(3, "", "описание", "2000-01-22", 90);
         filmController.post(film3);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с превышением максимальной длины описания;
         Film film4 = new Film(4, "Блэйд", "ааааааааааааааааааааааааааааааааааааааааааааааааааааа" +
                 "аааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа" +
-                "ааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа", "2000-01-22",90);
+                "ааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа", "2000-01-22", 90);
         filmController.post(film4);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с датой релиза раньше 28 декабря 1895;
-        Film film5 = new Film(5, "Терминатор", "описание", "1895-12-27",90);
+        Film film5 = new Film(5, "Терминатор", "описание", "1895-12-27", 90);
         filmController.post(film5);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с отрицательной продолжительностью;
-        Film film6 = new Film(5, "Терминатор", "описание", "2000-01-22",-90);
+        Film film6 = new Film(5, "Терминатор", "описание", "2000-01-22", -90);
         filmController.post(film6);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
     }
@@ -52,34 +52,34 @@ class TestValidation {
     @Test
     void putFilm() {
         FilmController filmController = new FilmController();
-        Film film = new Film(2, "Терминатор", "описание", "2000-01-22",90);
+        Film film = new Film(2, "Терминатор", "описание", "2000-01-22", 90);
         filmController.post(film);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм без наименования;
-        Film film3 = new Film(2, "", "описание", "2000-01-22",90);
+        Film film3 = new Film(2, "", "описание", "2000-01-22", 90);
         filmController.update(film3);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с превышением максимальной длины описания;
         Film film4 = new Film(2, "Блэйд", "ааааааааааааааааааааааааааааааааааааааааааааааааааааа" +
                 "аааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа" +
-                "ааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа", "2000-01-22",90);
+                "ааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа", "2000-01-22", 90);
         filmController.update(film4);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с датой релиза раньше 28 декабря 1895;
-        Film film5 = new Film(2, "Терминатор", "описание", "1895-12-27",90);
+        Film film5 = new Film(2, "Терминатор", "описание", "1895-12-27", 90);
         filmController.update(film5);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка исключения при попытке добавить фильм с отрицательной продолжительностью;
-        Film film6 = new Film(2, "Терминатор", "описание", "2000-01-22",-90);
+        Film film6 = new Film(2, "Терминатор", "описание", "2000-01-22", -90);
         filmController.update(film6);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
         //Проверка обновления фильма;
-        Film film7 = new Film(2, "Блэйд", "описание", "2000-01-22",90);
+        Film film7 = new Film(2, "Блэйд", "описание", "2000-01-22", 90);
         filmController.update(film7);
         assertEquals("Блэйд", filmController.findAll().get(2).getName(),
                 "Название должно быть Блэйд");
         //Проверка обновления фильма c неверным id;
-        Film film8 = new Film(5, "Блэйд", "описание", "2000-01-22",90);
+        Film film8 = new Film(5, "Блэйд", "описание", "2000-01-22", 90);
         filmController.update(film8);
         assertEquals(1, filmController.findAll().size(), "Количество фильмов должно быть равно 1");
     }
@@ -87,11 +87,11 @@ class TestValidation {
     @Test
     void showAllFilms() {
         FilmController filmController = new FilmController();
-        Film film = new Film(1, "Терминатор", "описание", "2000-01-22",90);
+        Film film = new Film(1, "Терминатор", "описание", "2000-01-22", 90);
         filmController.post(film);
-        Film film2 = new Film(2, "Терминатор2", "описание", "2000-01-22",90);
+        Film film2 = new Film(2, "Терминатор2", "описание", "2000-01-22", 90);
         filmController.post(film2);
-        Film film3 = new Film(3, "Терминатор3", "описание", "2000-01-22",90);
+        Film film3 = new Film(3, "Терминатор3", "описание", "2000-01-22", 90);
         filmController.post(film3);
         assertEquals(3, filmController.findAll().size(), "Количество фильмов должно быть равно 3");
         System.out.println(filmController.findAll());
@@ -142,7 +142,8 @@ class TestValidation {
         userController.post(user7);
         assertEquals(2, userController.findAll().size(),
                 "Количество пользователей должно быть равно 2");
-        }
+    }
+
     @Test
     void putUser() {
         UserController userController = new UserController();
@@ -201,6 +202,7 @@ class TestValidation {
                 "Количество пользователей должно быть равно 1");
 
     }
+
     @Test
     void showAllUsers() {
         UserController userController = new UserController();
@@ -216,7 +218,6 @@ class TestValidation {
         assertEquals(3, userController.findAll().size(),
                 "Количество пользователей должно быть равно 3");
     }
-
 
 
 }

@@ -25,14 +25,16 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(ru.yandex.practicum.filmorate.controller.FilmController.class);
     protected String message;
     int generatorId;
-    Gson gson=new Gson();
+    Gson gson = new Gson();
+
     @ResponseBody
     @GetMapping("/users")
     public ResponseEntity<?> findAllUsers() {
         log.debug("Текущее количество пользователей: {}", users.size());
         usersList.addAll(users.values());
-        return new ResponseEntity<>(gson.toJson(usersList),HttpStatus.OK);
+        return new ResponseEntity<>(gson.toJson(usersList), HttpStatus.OK);
     }
+
     @ResponseBody
     @PostMapping(value = "/users")
     public ResponseEntity<?> post(@RequestBody User user) {
@@ -46,7 +48,7 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
         try {
             if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
@@ -56,22 +58,22 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getName()==null || user.getName().isEmpty()) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
 
         try {
-            if (LocalDate.now().isBefore(LocalDate.parse(user.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+            if (LocalDate.now().isBefore(LocalDate.parse(user.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {
                 message = "дата рождения не может быть в будущем";
                 throw new ValidationException(HttpStatus.BAD_REQUEST, message);
             }
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
         try {
             if (users.containsKey(user.getId())) {
@@ -81,7 +83,7 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
         if (user.getId() == 0) {
             String stop = "пуск";
@@ -95,8 +97,9 @@ public class UserController {
         }
         users.put(user.getId(), user);
         log.debug("Добавлен пользователь: {}", user);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
     @ResponseBody
     @PutMapping(value = "/users")
 
@@ -109,7 +112,7 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
         try {
             if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
@@ -119,10 +122,10 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(exception,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getName()==null || user.getName().isEmpty()) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
 
@@ -134,17 +137,17 @@ public class UserController {
         } catch (ValidationException exception) {
             log.debug(message);
             System.out.println(message);
-            return new ResponseEntity<>(gson.toJson (exception.getLocalizedMessage()),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
 
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
             log.debug("Обновлён пользователь: {}", user);
-            return new ResponseEntity<>(user,HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
-            message="Пользователь с id: "+user.getId()+" не найден";
+            message = "Пользователь с id: " + user.getId() + " не найден";
             log.debug(message);
-            return new ResponseEntity<>(gson.toJson (message),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson(message), HttpStatus.NOT_FOUND);
         }
     }
 
