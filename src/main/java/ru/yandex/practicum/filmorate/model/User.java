@@ -4,9 +4,6 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 @Data
 public class User {
@@ -20,6 +17,7 @@ public class User {
     private String name;
     @NonNull
     private String birthday;
+
     public User(int id, String email, String login, String name, String birthday) {
         this.id = id;
         this.email = email;
@@ -28,5 +26,6 @@ public class User {
         this.birthday = birthday;
     }
 
-    public User(){}
+    public User() {
+    }
 }
