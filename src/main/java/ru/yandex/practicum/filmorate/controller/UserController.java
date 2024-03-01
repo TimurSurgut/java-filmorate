@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.userStorage.InMemoryUserStorage;
 
@@ -17,7 +17,8 @@ public class UserController {
         this.inMemoryUserStorage = inMemoryUserStorage;
         this.userService = userService;
     }
-    private final String PATHIDFRIENDSID ="/users/{id}/friends/{friendId}";
+
+    private final String PATHIDFRIENDSID = "/users/{id}/friends/{friendId}";
 
     @ResponseBody
     @GetMapping("/users")
