@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    private final String PATHIDFRIENDSID = "/users/{id}/friends/{friendId}";
+    private final String pathIdFriendsId = "/users/{id}/friends/{friendId}";
 
     @ResponseBody
     @GetMapping("/users")
@@ -39,13 +39,13 @@ public class UserController {
     }
 
     @ResponseBody
-    @PutMapping(value = PATHIDFRIENDSID)
+    @PutMapping(value = pathIdFriendsId)
     public ResponseEntity<?> addFriend(@PathVariable int id, @PathVariable int friendId) {
         return userService.addFriend(id, friendId);
     }
 
     @ResponseBody
-    @DeleteMapping(value = PATHIDFRIENDSID)
+    @DeleteMapping(value = pathIdFriendsId)
     public ResponseEntity<?> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
         return userService.deleteFriend(id, friendId);
     }

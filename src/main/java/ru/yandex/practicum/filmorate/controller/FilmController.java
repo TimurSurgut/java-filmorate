@@ -20,7 +20,7 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    private final String PATHIDLIKEID = "/films/{id}/like/{userId}";
+    private final String pathIdLikeId = "/films/{id}/like/{userId}";
 
     @ResponseBody
     @GetMapping("/films")
@@ -41,13 +41,13 @@ public class FilmController {
     }
 
     @ResponseBody
-    @PutMapping(value = PATHIDLIKEID)
+    @PutMapping(value = pathIdLikeId)
     public ResponseEntity<?> setLikeFilm(@PathVariable int id, @PathVariable int userId) {
         return filmService.setLikeFilm(id, userId);
     }
 
     @ResponseBody
-    @DeleteMapping(value = PATHIDLIKEID)
+    @DeleteMapping(value = pathIdLikeId)
     public ResponseEntity<?> deleteLikeFilm(@PathVariable int id, @PathVariable int userId) {
         return filmService.deleteLikeFilm(id, userId);
     }
