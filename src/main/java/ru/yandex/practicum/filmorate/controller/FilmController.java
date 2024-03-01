@@ -19,6 +19,7 @@ public class FilmController {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
         this.filmService = filmService;
     }
+    private final String PATHIDLIKEID ="/films/{id}/like/{userId}";
 
     @ResponseBody
     @GetMapping("/films")
@@ -39,13 +40,13 @@ public class FilmController {
     }
 
     @ResponseBody
-    @PutMapping(value = "/films/{id}/like/{userId}")
+    @PutMapping(value = PATHIDLIKEID)
     public ResponseEntity<?> setLikeFilm(@PathVariable int id, @PathVariable int userId) {
         return filmService.setLikeFilm(id, userId);
     }
 
     @ResponseBody
-    @DeleteMapping(value = "/films/{id}/like/{userId}")
+    @DeleteMapping(value = PATHIDLIKEID)
     public ResponseEntity<?> deleteLikeFilm(@PathVariable int id, @PathVariable int userId) {
         return filmService.deleteLikeFilm(id, userId);
     }

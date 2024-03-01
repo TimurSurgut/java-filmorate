@@ -1,24 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 
 import java.util.HashSet;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class
 User {
 
-    private int id;
-    @NonNull
-    private String email;
-    @NonNull
-    private String login;
-
-    private String name;
-    @NonNull
-    private String birthday;
-    private HashSet<Integer> friends = new HashSet<>();
+    int id;
+    String email;
+    String login;
+    String name;
+    String birthday;
+    HashSet<Integer> friends = new HashSet<>();
 
     public User(int id, String email, String login, String name, String birthday) {
         this.id = id;
