@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public interface FilmStorage {
 
-
     public ResponseEntity<?> findAllFilms();
 
     public ResponseEntity<?> postFilm(Film film);

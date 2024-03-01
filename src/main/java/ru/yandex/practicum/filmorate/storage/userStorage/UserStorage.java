@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 @Component
 public interface UserStorage {
+
     ResponseEntity<?> findAllUsers();
 
     ResponseEntity<?> postUser(User user);
