@@ -14,8 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     public HashMap<Integer, User> users = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(ru.yandex.practicum.filmorate.controller.FilmController.class);
     protected String message;
@@ -92,7 +93,7 @@ public class InMemoryUserStorage implements UserStorage{
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-   @Override
+    @Override
     public ResponseEntity<?> updateUser(User user) {
         try {
             if (user.getEmail() == null || user.getEmail().indexOf("@") == -1) {
@@ -140,7 +141,8 @@ public class InMemoryUserStorage implements UserStorage{
             return new ResponseEntity<>(gson.toJson(message), HttpStatus.NOT_FOUND);
         }
     }
-@Override
+
+    @Override
     public HashMap<Integer, User> findAll() {
         return users;
     }
