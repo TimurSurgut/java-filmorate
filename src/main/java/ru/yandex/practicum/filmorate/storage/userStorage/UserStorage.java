@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.HashMap;
 
 @Component
+
 public interface UserStorage {
 
     ResponseEntity<?> findAllUsers();
@@ -18,4 +19,5 @@ public interface UserStorage {
     HashMap<Integer, User> findAll();
 
     ResponseEntity<?> getUserById(int id);
+
 }
