@@ -28,8 +28,7 @@ public class FilmService {
         if (!filmStorage.findAll().containsKey(idFilm)) {
             return new ResponseEntity<>(gson.toJson("Фильм с id " + idFilm + " не найден"), HttpStatus.NOT_FOUND);
         } else if (!userStorage.findAll().containsKey(idUser)) {
-            return new ResponseEntity<>
-                    (gson.toJson("Пользователь с id " + idUser + " не зарегистрирован"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Пользователь с id " + idUser + " не зарегистрирован"), HttpStatus.NOT_FOUND);
         } else {
             filmStorage.findAll().get(idFilm).getLike().add(idUser);
             filmStorage.findAll().get(idFilm).getLikeQuantity();
@@ -39,15 +38,11 @@ public class FilmService {
 
     public ResponseEntity<?> deleteLikeFilm(int idFilm, int idUser) {
         if (!filmStorage.findAll().containsKey(idFilm)) {
-            return new ResponseEntity<>
-                    (gson.toJson("Фильм с id " + idFilm + " не найден"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Фильм с id " + idFilm + " не найден"), HttpStatus.NOT_FOUND);
         } else if (!userStorage.findAll().containsKey(idUser)) {
-            return new ResponseEntity<>
-                    (gson.toJson("Пользователь с id " + idUser + " не зарегистрирован"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Пользователь с id " + idUser + " не зарегистрирован"), HttpStatus.NOT_FOUND);
         } else if (!filmStorage.findAll().get(idFilm).getLike().contains(idUser)) {
-            return new ResponseEntity<>
-                    (gson.toJson("Пользователь с id " + idUser + " не ставил лайк фильму с id " + idFilm),
-                            HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Пользователь с id " + idUser + " не ставил лайк фильму с id " + idFilm), HttpStatus.NOT_FOUND);
         } else {
             filmStorage.findAll().get(idFilm).getLike().remove(idUser);
             return new ResponseEntity<>(gson.toJson("Лайк удалён"), HttpStatus.OK);
@@ -56,10 +51,7 @@ public class FilmService {
 
     public ResponseEntity<?> getPopularFilm(int count) {
         ArrayList<Film> films = new ArrayList<>(filmStorage.findAll().values());
-        ArrayList<Film> sortedFilm = films.stream()
-                .sorted(this::compare)
-                .limit(count)
-                .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Film> sortedFilm = films.stream().sorted(this::compare).limit(count).collect(Collectors.toCollection(ArrayList::new));
         return new ResponseEntity<>(gson.toJson(sortedFilm), HttpStatus.OK);
     }
 
