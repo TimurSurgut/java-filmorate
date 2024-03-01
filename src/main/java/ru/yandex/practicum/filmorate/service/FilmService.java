@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class FilmService {
     final FilmStorage filmStorage;
     final UserStorage userStorage;
+
     Gson gson = new Gson();
 
     @Autowired
@@ -23,6 +24,7 @@ public class FilmService {
         this.userStorage = userStorage;
         this.filmStorage = filmStorage;
     }
+
 
     public ResponseEntity<?> setLikeFilm(int idFilm, int idUser) {
         if (!filmStorage.findAll().containsKey(idFilm)) {
