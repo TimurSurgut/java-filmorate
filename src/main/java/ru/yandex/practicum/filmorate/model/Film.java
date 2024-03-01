@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.HashSet;
+
 
 /**
  * Film.
@@ -18,6 +20,8 @@ public class Film {
     private String releaseDate;
     @NonNull
     private int duration;
+    private HashSet<Integer> like = new HashSet<>();
+    private Integer likeQuantity;
 
     public Film(int id, String name, String description, String releaseDate, int duration) {
         this.id = id;
@@ -30,5 +34,8 @@ public class Film {
     public Film() {
     }
 
-
+    public Integer getLikeQuantity() {
+        setLikeQuantity(getLike().size());
+        return getLike().size();
+    }
 }

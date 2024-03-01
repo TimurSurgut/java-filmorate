@@ -4,9 +4,13 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Data
-public class User {
+public class
+User {
 
     private int id;
     @NonNull
@@ -17,6 +21,7 @@ public class User {
     private String name;
     @NonNull
     private String birthday;
+    private HashSet<Integer> friends = new HashSet<>();
 
     public User(int id, String email, String login, String name, String birthday) {
         this.id = id;
