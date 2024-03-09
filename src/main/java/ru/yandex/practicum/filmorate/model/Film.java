@@ -1,23 +1,25 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
+
+import java.util.HashSet;
 
 
 /**
  * Film.
  */
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class Film {
-    private int id = 0;
-    @NonNull
-    private String name;
-    @NonNull
-    private String description;
-    @NonNull
-    private String releaseDate;
-    @NonNull
-    private int duration;
+    int id = 0;
+    String name;
+    String description;
+    String releaseDate;
+    int duration;
+    HashSet<Integer> like = new HashSet<>();
+    Integer likeQuantity;
 
     public Film(int id, String name, String description, String releaseDate, int duration) {
         this.id = id;
@@ -30,5 +32,8 @@ public class Film {
     public Film() {
     }
 
-
+    public Integer getLikeQuantity() {
+        setLikeQuantity(getLike().size());
+        return getLike().size();
+    }
 }

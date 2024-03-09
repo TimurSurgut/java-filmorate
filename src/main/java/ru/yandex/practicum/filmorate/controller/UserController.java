@@ -1,157 +1,73 @@
 package ru.yandex.practicum.filmorate.controller;
 
-
-import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-
-import ru.yandex.practicum.filmorate.model.*;
-
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.userStorage.InMemoryUserStorage;
 
 @RestController
 public class UserController {
-    public HashMap<Integer, User> users = new HashMap<>();
-    List<User> usersList = new ArrayList<>();
-    private static final Logger log = LoggerFactory.getLogger(ru.yandex.practicum.filmorate.controller.FilmController.class);
-    protected String message;
-    int generatorId;
-    Gson gson = new Gson();
+    InMemoryUserStorage inMemoryUserStorage;
+    UserService userService;
+
+    @Autowired
+    public UserController(InMemoryUserStorage inMemoryUserStorage, UserService userService) {
+        this.inMemoryUserStorage = inMemoryUserStorage;
+        this.userService = userService;
+    }
+
+    private final String pathIdFriendsId = "/users/{id}/friends/{friendId}";
 
     @ResponseBody
     @GetMapping("/users")
     public ResponseEntity<?> findAllUsers() {
-        log.debug("Текущее количество пользователей: {}", users.size());
-        usersList.addAll(users.values());
-        return new ResponseEntity<>(gson.toJson(usersList), HttpStatus.OK);
+        return inMemoryUserStorage.findAllUsers();
     }
 
     @ResponseBody
     @PostMapping(value = "/users")
-    public ResponseEntity<?> post(@RequestBody User user) {
-
-
-        try {
-            if (user.getEmail() == null || user.getEmail().indexOf("@") == -1) {
-                message = "электронная почта не может быть пустой и должна содержать символ @";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-        try {
-            if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-                message = "логин не может быть пустым и содержать пробелы";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-
-        try {
-            if (LocalDate.now().isBefore(LocalDate.parse(user.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {
-                message = "дата рождения не может быть в будущем";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-        try {
-            if (users.containsKey(user.getId())) {
-                message = "Пользователь с таким Id уже добавлен!";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-        if (user.getId() == 0) {
-            String stop = "пуск";
-            while (stop.equals("пуск")) {
-                generatorId++;
-                if (!users.containsKey(generatorId)) {
-                    user.setId(generatorId);
-                }
-                stop = "стоп";
-            }
-        }
-        users.put(user.getId(), user);
-        log.debug("Добавлен пользователь: {}", user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<?> postUser(@RequestBody User user) {
+        return inMemoryUserStorage.postUser(user);
     }
 
     @ResponseBody
     @PutMapping(value = "/users")
-
-    public ResponseEntity<?> update(@RequestBody User user) {
-        try {
-            if (user.getEmail() == null || user.getEmail().indexOf("@") == -1) {
-                message = "электронная почта не может быть пустой и должна содержать символ @";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-        try {
-            if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-                message = "логин не может быть пустым и содержать пробелы";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
-        }
-
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-
-        try {
-            if (LocalDate.now().isBefore(LocalDate.parse(user.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {
-                message = "дата рождения не может быть в будущем";
-                throw new ValidationException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (ValidationException exception) {
-            log.debug(message);
-            System.out.println(message);
-            return new ResponseEntity<>(gson.toJson(exception.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-
-        if (users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
-            log.debug("Обновлён пользователь: {}", user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            message = "Пользователь с id: " + user.getId() + " не найден";
-            log.debug(message);
-            return new ResponseEntity<>(gson.toJson(message), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        return inMemoryUserStorage.updateUser(user);
     }
 
-    public HashMap<Integer, User> findAll() {
-        return users;
+    @ResponseBody
+    @PutMapping(value = pathIdFriendsId)
+    public ResponseEntity<?> addFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.addFriend(id, friendId);
+    }
+
+    @ResponseBody
+    @DeleteMapping(value = pathIdFriendsId)
+    public ResponseEntity<?> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.deleteFriend(id, friendId);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/users/{id}/friends")
+    public ResponseEntity<?> getAllFriends(@PathVariable int id) {
+        return userService.getAllFriends(id);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/users/{id}/friends/common/{otherId}")
+    public ResponseEntity<?> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
+
+    @ResponseBody
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserByID(@PathVariable int id) {
+        return inMemoryUserStorage.getUserById(id);
     }
 }
+
+
+
