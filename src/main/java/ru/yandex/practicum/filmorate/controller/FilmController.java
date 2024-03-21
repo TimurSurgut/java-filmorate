@@ -1,67 +1,51 @@
 package ru.yandex.practicum.filmorate.controller;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.filmStorage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 
+@Slf4j
 @RestController
+@RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
-    final InMemoryFilmStorage inMemoryFilmStorage;
-    final FilmService filmService;
+    private final FilmService filmService;
 
-    @Autowired
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-        this.filmService = filmService;
+    @PostMapping
+    public Film addFilm(@RequestBody Film film) {
+        return filmService.add(film);
     }
 
-    private final String pathIdLikeId = "/films/{id}/like/{userId}";
-
-    @ResponseBody
-    @GetMapping("/films")
-    public ResponseEntity<?> findAllFilms() {
-        return inMemoryFilmStorage.findAllFilms();
+    @PutMapping
+    public Film updateFilm(@RequestBody Film film) {
+        return filmService.update(film);
     }
 
-    @ResponseBody
-    @PostMapping(value = "/films")
-    public ResponseEntity<?> postFilm(@RequestBody Film film) {
-        return inMemoryFilmStorage.postFilm(film);
+    @GetMapping
+    public Iterable<Film> getFilms() {
+        return filmService.getAll();
     }
 
-    @ResponseBody
-    @PutMapping(value = "/films")
-    public ResponseEntity<?> updateFilm(@RequestBody Film film) {
-        return inMemoryFilmStorage.updateFilm(film);
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable Long id) {
+        return filmService.get(id);
     }
 
-    @ResponseBody
-    @PutMapping(value = pathIdLikeId)
-    public ResponseEntity<?> setLikeFilm(@PathVariable int id, @PathVariable int userId) {
-        return filmService.setLikeFilm(id, userId);
+    @GetMapping("/popular")
+    public Iterable<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
     }
 
-    @ResponseBody
-    @DeleteMapping(value = pathIdLikeId)
-    public ResponseEntity<?> deleteLikeFilm(@PathVariable int id, @PathVariable int userId) {
-        return filmService.deleteLikeFilm(id, userId);
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable long id, @PathVariable long userId) {
+        filmService.addLike(id, userId);
     }
 
-    @ResponseBody
-    @GetMapping(value = "/films/popular")
-    public ResponseEntity<?> getPopularFilm(@RequestParam(defaultValue = "10") int count) {
-        return filmService.getPopularFilm(count);
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable long id, @PathVariable long userId) {
+        filmService.deleteLike(id, userId);
     }
-
-    @ResponseBody
-    @GetMapping("/films/{id}")
-    public ResponseEntity<?> getFilmByID(@PathVariable int id) {
-        return inMemoryFilmStorage.getFilmById(id);
-    }
-
 }

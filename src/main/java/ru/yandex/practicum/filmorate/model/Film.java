@@ -1,39 +1,25 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
-/**
- * Film.
- */
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class Film {
-    int id = 0;
-    String name;
-    String description;
-    String releaseDate;
-    int duration;
-    HashSet<Integer> like = new HashSet<>();
-    Integer likeQuantity;
-
-    public Film(int id, String name, String description, String releaseDate, int duration) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-    }
-
-    public Film() {
-    }
-
-    public Integer getLikeQuantity() {
-        setLikeQuantity(getLike().size());
-        return getLike().size();
-    }
+    private Long id;
+    @NotNull(message = "У фильма должно быть имя")
+       private String name;
+    @NotNull(message = "У фильма должно быть описание")
+       private String description;
+    @NotNull(message = "У фильма должна быть указана дата релиза")
+        private LocalDate releaseDate;
+    @NotNull(message = "У фильма должна быть указана продолжительность")
+        private Integer duration;
+    @NotNull(message = "У фильма должен быть указан рейтинг MPA")
+    private Mpa mpa;
+    private List<Genre> genres = new ArrayList<>();
 }
