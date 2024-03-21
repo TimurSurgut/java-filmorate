@@ -54,7 +54,7 @@ public class FriendsDaoImpl implements FriendsDao {
     @Override
     public Collection<Long> getUserIds(long friendId) {
         log.debug("getFriends({}).", friendId);
-        List<Long> Friend = jdbcTemplate.query(format(""
+        List<Long> friend = jdbcTemplate.query(format(""
                         + "SELECT user_id, friend_id, status_request "
                         + "FROM Friends "
                         + "WHERE friend_id=%d", friendId), new FriendsMapper())
@@ -62,8 +62,8 @@ public class FriendsDaoImpl implements FriendsDao {
                 .map(Friends::getUserId)
                 .collect(Collectors.toList());
         log.trace("Возвращены запросы на дружбу с пользователем ID_{}: {}.",
-                friendId, Friend);
-        return Friend;
+                friendId, friend);
+        return friend;
     }
 
     @Override
