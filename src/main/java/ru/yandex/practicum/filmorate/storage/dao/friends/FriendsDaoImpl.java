@@ -22,11 +22,11 @@ public class FriendsDaoImpl implements FriendsDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void add(long userId, long friendId, boolean status_request) {
-        log.debug("add({}, {}, {}).", userId, friendId, status_request);
+    public void add(long userId, long friendId, boolean statusRequest) {
+        log.debug("add({}, {}, {}).", userId, friendId, statusRequest);
         jdbcTemplate.update(""
                 + "INSERT INTO Friends (user_id, friend_id, status_request) "
-                + "VALUES(?, ?, ?)", userId, friendId, status_request);
+                + "VALUES(?, ?, ?)", userId, friendId, statusRequest);
         Friends result = get(userId, friendId);
         log.trace("Добавлена связь: {}.", result);
     }
@@ -54,7 +54,7 @@ public class FriendsDaoImpl implements FriendsDao {
     @Override
     public Collection<Long> getUserIds(long friendId) {
         log.debug("getFriends({}).", friendId);
-        List<Long> Friendss = jdbcTemplate.query(format(""
+        List<Long> Friend = jdbcTemplate.query(format(""
                         + "SELECT user_id, friend_id, status_request "
                         + "FROM Friends "
                         + "WHERE friend_id=%d", friendId), new FriendsMapper())
@@ -62,8 +62,8 @@ public class FriendsDaoImpl implements FriendsDao {
                 .map(Friends::getUserId)
                 .collect(Collectors.toList());
         log.trace("Возвращены запросы на дружбу с пользователем ID_{}: {}.",
-                friendId, Friendss);
-        return Friendss;
+                friendId, Friend);
+        return Friend;
     }
 
     @Override
