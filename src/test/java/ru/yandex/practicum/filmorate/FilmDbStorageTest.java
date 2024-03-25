@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -18,38 +19,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@JdbcTest // указываем, о необходимости подготовить бины для работы с БД
+@JdbcTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmDbStorageTest {
-    private final JdbcTemplate jdbcTemplate;
+   private final JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testFindFilmById() {
-        MpaDaoImpl mpaDao = new MpaDaoImpl(jdbcTemplate);
-        Mpa mpa = mpaDao.get(1);
-        GenreDaoImpl genreDao = new GenreDaoImpl(jdbcTemplate);
-        Genre genre1 = genreDao.get(1);
-        Genre genre2 = genreDao.get(2);
-        List<Genre> genres = new ArrayList<>();
-        genres.add(genre1);
-        genres.add(genre2);
-
-        Film newFilm = new Film(1L, "terminator", "normFilm", LocalDate.parse("2000-10-01"), 120, mpa, genres);
-        FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
-        filmStorage.add(newFilm);
-
-
-        Film savedFilm = filmStorage.get(1);
-        savedFilm.setGenres(newFilm.getGenres());
-
-        assertThat(savedFilm)
-                .isNotNull()
-                .usingRecursiveComparison()
-                .isEqualTo(newFilm);
-    }
-
-    @Test
-    public void testUpdateFilmById() {
+    public void testFindFilmByIdAndUpdate() {
         MpaDaoImpl mpaDao = new MpaDaoImpl(jdbcTemplate);
         Mpa mpa = mpaDao.get(1);
         Mpa mpaUpdate = mpaDao.get(2);
@@ -68,12 +44,22 @@ class FilmDbStorageTest {
         Film updateFilm = new Film(1L, "update", "update", LocalDate.parse("2020-10-01"), 100, mpaUpdate, genresUpdate);
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         filmStorage.add(newFilm);
-        filmStorage.update(updateFilm);
 
         Film savedFilm = filmStorage.get(1);
+        savedFilm.setGenres(newFilm.getGenres());
+
         assertThat(savedFilm)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(newFilm);
+        filmStorage.update(updateFilm);
+
+        Film savedFilm1 = filmStorage.get(1);
+        assertThat(savedFilm1)
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(updateFilm);
     }
+
+
 }
