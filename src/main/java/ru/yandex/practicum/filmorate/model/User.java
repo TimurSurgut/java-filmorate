@@ -10,7 +10,7 @@ public class User {
 
     private Long id;
 
-     private String email;
+    private String email;
 
     private String login;
 
@@ -25,6 +25,7 @@ public class User {
         this.name = name;
         this.birthday = birthday;
     }
+
     public User() {
 
     }
