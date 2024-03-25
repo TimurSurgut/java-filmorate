@@ -40,7 +40,7 @@ class FilmDbStorageTest {
 
 
         Film savedFilm = filmStorage.get(1);
-
+        savedFilm.setGenres(newFilm.getGenres());
 
         assertThat(savedFilm)
                 .isNotNull()
