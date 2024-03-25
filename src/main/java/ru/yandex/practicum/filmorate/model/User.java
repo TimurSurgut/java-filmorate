@@ -6,8 +6,9 @@ import java.time.LocalDate;
 
 @Data
 public class User {
-    private Long id;
 
+
+    private Long id;
 
      private String email;
 
@@ -16,6 +17,17 @@ public class User {
     private String name;
 
     private LocalDate birthday;
+
+    public User(Long id, String email, String login, String name, LocalDate birthday) {
+        this.id = id;
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
+    public User() {
+
+    }
 
     public String getName() {
         if (name == null || name.isBlank()) {

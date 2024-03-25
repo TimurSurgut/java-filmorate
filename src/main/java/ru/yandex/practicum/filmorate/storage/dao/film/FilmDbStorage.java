@@ -7,8 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.storage.mapper.GenreMapper;
+import ru.yandex.practicum.filmorate.storage.mapper.MpaMapper;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class FilmDbStorage implements FilmStorage {
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration(),
                 film.getMpa().getId()), new FilmMapper());
+                addGenres(film.getId(), film.getGenres());
         log.trace("В хранилище добавлен фильм: {}.", result);
         return result;
     }
@@ -65,6 +68,8 @@ public class FilmDbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId());
         Film result = get(film.getId());
+        result.setGenres(film.getGenres());
+        updateGenres(film.getId(), film.getGenres());
         log.trace("Обновлён фильм: {}.", result);
         return result;
     }
@@ -75,6 +80,12 @@ public class FilmDbStorage implements FilmStorage {
         Film film = jdbcTemplate.queryForObject(format(""
                 + "SELECT film_id, name, description, release_date, duration, rating_id FROM film "
                 + "WHERE film_id=%d", filmID), new FilmMapper());
+                Mpa mpa = jdbcTemplate.queryForObject(format(""
+                + "SELECT rating_id, name "
+                + "FROM rating "
+                + "WHERE rating_id=%d", film.getMpa().getId()), new MpaMapper());
+        film.setMpa(mpa);
+        film.setGenres(getGenres(filmID));
         log.trace("Возвращён фильм: {}", film);
         return film;
     }
