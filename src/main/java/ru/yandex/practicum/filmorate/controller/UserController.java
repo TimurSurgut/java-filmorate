@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.service.user.UserService;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    final String pathFriends= "/{id}/friends/{friendId}";
+    final String pathFriends = "/{id}/friends/{friendId}";
 
     @PostMapping
     public User addUser(@RequestBody User user) {
