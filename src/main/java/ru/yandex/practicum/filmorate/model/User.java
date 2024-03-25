@@ -1,24 +1,24 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
+import java.time.LocalDate;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
-public class
-User {
+public class User {
 
-    int id;
-    String email;
-    String login;
-    String name;
-    String birthday;
-    HashSet<Integer> friends = new HashSet<>();
 
-    public User(int id, String email, String login, String name, String birthday) {
+    private Long id;
+
+    private String email;
+
+    private String login;
+
+    private String name;
+
+    private LocalDate birthday;
+
+    public User(Long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
         this.email = email;
         this.login = login;
@@ -27,5 +27,13 @@ User {
     }
 
     public User() {
+
+    }
+
+    public String getName() {
+        if (name == null || name.isBlank()) {
+            name = login;
+        }
+        return name;
     }
 }

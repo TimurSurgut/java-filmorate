@@ -1,73 +1,57 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.userStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 
+
+@Slf4j
 @RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-    InMemoryUserStorage inMemoryUserStorage;
-    UserService userService;
+    private final UserService userService;
+    final String pathFriends = "/{id}/friends/{friendId}";
 
-    @Autowired
-    public UserController(InMemoryUserStorage inMemoryUserStorage, UserService userService) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
-        this.userService = userService;
+    @PostMapping
+    public User addUser(@RequestBody User user) {
+        return userService.add(user);
     }
 
-    private final String pathIdFriendsId = "/users/{id}/friends/{friendId}";
-
-    @ResponseBody
-    @GetMapping("/users")
-    public ResponseEntity<?> findAllUsers() {
-        return inMemoryUserStorage.findAllUsers();
+    @PutMapping
+    public User updateUser(@RequestBody User user) {
+        return userService.update(user);
     }
 
-    @ResponseBody
-    @PostMapping(value = "/users")
-    public ResponseEntity<?> postUser(@RequestBody User user) {
-        return inMemoryUserStorage.postUser(user);
+    @GetMapping
+    public Iterable<User> getUsers() {
+        return userService.getAll();
     }
 
-    @ResponseBody
-    @PutMapping(value = "/users")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-        return inMemoryUserStorage.updateUser(user);
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable long id) {
+        return userService.get(id);
     }
 
-    @ResponseBody
-    @PutMapping(value = pathIdFriendsId)
-    public ResponseEntity<?> addFriend(@PathVariable int id, @PathVariable int friendId) {
-        return userService.addFriend(id, friendId);
+    @GetMapping("/{id}/friends")
+    public Iterable<User> getFriends(@PathVariable long id) {
+        return userService.getFriends(id);
     }
 
-    @ResponseBody
-    @DeleteMapping(value = pathIdFriendsId)
-    public ResponseEntity<?> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
-        return userService.deleteFriend(id, friendId);
+    @PutMapping(pathFriends)
+    public void addFriend(@PathVariable long id, @PathVariable long friendId) {
+        userService.addFriend(id, friendId);
     }
 
-    @ResponseBody
-    @GetMapping(value = "/users/{id}/friends")
-    public ResponseEntity<?> getAllFriends(@PathVariable int id) {
-        return userService.getAllFriends(id);
+    @DeleteMapping(pathFriends)
+    public void deleteFriend(@PathVariable long id, @PathVariable long friendId) {
+        userService.deleteFriend(id, friendId);
     }
 
-    @ResponseBody
-    @GetMapping(value = "/users/{id}/friends/common/{otherId}")
-    public ResponseEntity<?> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Iterable<User> getMutualFriends(@PathVariable long id, @PathVariable long otherId) {
         return userService.getCommonFriends(id, otherId);
     }
-
-    @ResponseBody
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserByID(@PathVariable int id) {
-        return inMemoryUserStorage.getUserById(id);
-    }
 }
-
-
-
