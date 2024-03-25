@@ -49,8 +49,7 @@ public class FilmDbStorage implements FilmStorage {
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration(),
                 film.getMpa().getId()), new FilmMapper());
-        addGenres(film.getId(), film.getGenres());
-        log.trace("В хранилище добавлен фильм: {}.", result);
+                log.trace("В хранилище добавлен фильм: {}.", result);
         return result;
     }
 
