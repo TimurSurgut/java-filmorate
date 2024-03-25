@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.service.user.UserService;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    final String pathFriends= "/{id}/friends/{friendId}";
 
     @PostMapping
     public User addUser(@RequestBody User user) {
@@ -39,12 +40,12 @@ public class UserController {
         return userService.getFriends(id);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping(pathFriends)
     public void addFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping(pathFriends)
     public void deleteFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.deleteFriend(id, friendId);
     }

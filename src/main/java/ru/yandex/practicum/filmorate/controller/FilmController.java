@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.service.film.FilmService;
 @RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
+    final String pathLike = "/{id}/like/{userId}";
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
@@ -39,12 +40,12 @@ public class FilmController {
         return filmService.getPopularFilms(count);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping(pathLike)
     public void addLike(@PathVariable long id, @PathVariable long userId) {
         filmService.addLike(id, userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping(pathLike)
     public void deleteLike(@PathVariable long id, @PathVariable long userId) {
         filmService.deleteLike(id, userId);
     }
