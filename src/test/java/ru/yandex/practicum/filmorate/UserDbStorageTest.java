@@ -18,38 +18,24 @@ class UserDbStorageTest {
     private final JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testFindUserById() {
-        // Подготавливаем данные для теста
-        User newUser = new User(1L, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1));
-        UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
-        userStorage.add(newUser);
-
-        // вызываем тестируемый метод
-        User savedUser = userStorage.get(1);
-
-        // проверяем утверждения
-        assertThat(savedUser)
-                .isNotNull() // проверяем, что объект не равен null
-                .usingRecursiveComparison() // проверяем, что значения полей нового
-                .isEqualTo(newUser);        // и сохраненного пользователя - совпадают
-    }
-
-    @Test
-    public void testUpdateUserById() {
-        // Подготавливаем данные для теста
+    public void testFindUserByIdAndUpdate() {
         User newUser = new User(1L, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1));
         User newUserforUpdate = new User(1L, "userForUpdate@email.ru", "userForUpdate", "userForUpdate", LocalDate.of(1995, 5, 5));
         UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
         userStorage.add(newUser);
-
-        // вызываем тестируемый метод
-        User savedUser = userStorage.update(newUserforUpdate);
-
-        // проверяем утверждения
+        User savedUser = userStorage.get(1);
         assertThat(savedUser)
-                .isNotNull() // проверяем, что объект не равен null
-                .usingRecursiveComparison() // проверяем, что значения полей нового
-                .isEqualTo(newUserforUpdate);        // и сохраненного пользователя - совпадают
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(newUser);
+        User savedUser1 = userStorage.update(newUserforUpdate);
+
+
+        assertThat(savedUser1)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(newUserforUpdate);
+
     }
 
 
